@@ -1,0 +1,7 @@
+{
+  "type": "sqlite",
+  "database": "db.sqlite3",
+  "autoSchemaSync": true,
+  "entities": ["src/*.entity{.ts,.js}"],
+  "synchronize": true
+}
