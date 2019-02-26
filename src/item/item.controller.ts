@@ -1,43 +1,43 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ItemService } from './item.service';
 import { Item } from './item.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('item')
-export class AppController {
-  constructor(@InjectRepository(Item) private readonly itemRepository: Repository<Item>) {
+export class ItemController {
+
+  constructor(private itemService: ItemService) {
   }
 
   @Get()
   async getItem(): Promise<Item[]> {
-    return await this.itemRepository.find();
+    return await this.itemService.findAll();
   }
 
   @Get(':id')
   async getItemById(@Param() params): Promise<Item> {
-    return await this.itemRepository.findOneOrFail(params.id);
+    return await this.itemService.findOne(params.id);
   }
 
   @Post()
   async createItem(@Body() item: Item): Promise<Item> {
-    return await this.itemRepository.save(item);
+    return await this.itemService.save(item);
   }
 
   @Patch(':id')
   async updateItem(@Param() params, @Body() updatedItem: Item): Promise<Item> {
-    const item = await this.itemRepository.findOneOrFail(params.id);
+    const item = await this.itemService.findOne(params.id);
 
     item.name = updatedItem.name;
     item.isCompleted = updatedItem.isCompleted;
     item.isArchived = updatedItem.isArchived;
 
-    return await this.itemRepository.save(item);
+    return await this.itemService.save(item);
   }
 
   @Delete(':id')
   async deleteItem(@Param() params): Promise<Item> {
-    const item = await this.itemRepository.findOneOrFail(params.id);
+    const item = await this.itemService.findOne(params.id);
 
-    return await this.itemRepository.remove(item);
+    return await this.itemService.remove(item);
   }
 }
