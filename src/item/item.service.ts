@@ -6,12 +6,11 @@ import { Item } from './item.entity';
 @Injectable()
 export class ItemService {
 
-  constructor(@InjectRepository(Item)
-              private readonly photoRepository: Repository<Item>) {
+  constructor(@InjectRepository(Item) private readonly photoRepository: Repository<Item>) {
   }
 
   async findAll(): Promise<Item[]> {
-    return await this.photoRepository.find();
+    return await this.photoRepository.find({ where: { isArchived: false } });
   }
 
   async findOne(id: any): Promise<Item> {
