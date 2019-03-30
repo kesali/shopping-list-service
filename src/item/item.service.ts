@@ -17,6 +17,17 @@ export class ItemService {
     return await this.itemRepository.find({ where: { isArchived: true }, take, skip });
   }
 
+  async addToHistory(): Promise<void> {
+    const completedItems = await this.itemRepository.find({ where: { isCompleted: true } });
+
+    completedItems.map(async item => {
+        item.isArchived = true;
+
+        await this.itemRepository.save(item);
+      },
+    );
+  }
+
   async findOne(id: any): Promise<Item> {
     return await this.itemRepository.findOneOrFail(id);
   }
