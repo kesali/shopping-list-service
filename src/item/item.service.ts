@@ -21,10 +21,10 @@ export class ItemService {
     const completedItems = await this.itemRepository.find({ where: { isCompleted: true } });
 
     completedItems.map(async item => {
-        item.isArchived = true;
+      item.isArchived = true;
 
-        await this.itemRepository.save(item);
-      },
+      await this.itemRepository.save(item);
+    },
     );
   }
 
@@ -38,5 +38,14 @@ export class ItemService {
 
   async remove(item: Item): Promise<Item> {
     return await this.itemRepository.remove(item);
+  }
+
+  async overview() {
+    return {
+      total: await this.itemRepository.count(),
+      current: await this.itemRepository.count({ where: { isArchived: false } }),
+      completed: await this.itemRepository.count({ where: { isCompleted: true } }),
+      deleted: await this.itemRepository.count({ where: { isArchived: true } }),
+    };
   }
 }
