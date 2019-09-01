@@ -44,7 +44,7 @@ export class ItemService {
     return {
       total: await this.itemRepository.count(),
       current: await this.itemRepository.count({ where: { isArchived: false } }),
-      completed: await this.itemRepository.count({ where: { isCompleted: true } }),
+      completed: await this.itemRepository.count({ where: { isCompleted: true, isArchived: false } }),
       deleted: await this.itemRepository.count({ where: { isArchived: true } }),
     };
   }
